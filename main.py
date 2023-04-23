@@ -1,6 +1,7 @@
 from getRoutersConfig import setInformations
 import json
-router = setInformations(host_ip='192.168.1.101', user='admin', password='!adm;rmi')
+
+router = setInformations(host_ip='192.168.1.101', user='admin', password='')
 
 # table = router.getStaticRoutes()
 
