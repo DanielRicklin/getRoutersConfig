@@ -1,7 +1,6 @@
 from ipaddress import IPv4Network
 import re
 
-
 class Cisco:
     def __init__(self, net_connect):
         self.net_connect = net_connect
@@ -136,7 +135,7 @@ class Cisco:
                 re_vrf = r"ip vrf forwarding (?P<vrf>\S+)"
                 match_vrf = re.search(re_vrf, output_run, flags=re.M)
                 vrf = match_vrf.group('vrf') if match_vrf else ""
-                
+
                 v4_interfaces[0]["routed"].append({
                     "name": intf_name,
                     "ip": ip_info[0],

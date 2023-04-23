@@ -28,5 +28,9 @@ setup(
 )
 
 #python setup.py bdist_wheel sdist
+#python -m twine check dist/*
+#python -m twine upload dist/*
+
+#Test the code
 #pip install .
 #python main.py
