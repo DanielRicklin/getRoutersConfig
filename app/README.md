@@ -7,7 +7,7 @@ This return Cisco configuration and information like :
  - Interfaces
  - DHCP
 
-# Information
+# Informations
 bastion_ip and bastion_port are optional
 
 # Get system informations
