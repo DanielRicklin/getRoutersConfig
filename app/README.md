@@ -7,6 +7,9 @@ This return Cisco configuration and information like :
  - Interfaces
  - DHCP
 
+# Information
+bastion_ip and bastion_port are optional
+
 # Get system informations
 ```python
 from getRoutersConfig import setInformations
