@@ -15,5 +15,5 @@ router = setInformations(host_ip=IP, user=USER, password=PASSWORD)
 # table = router.getDhcp()
 
 table = router.getFullConfiguration()
-# print(table)
+
 print(json.dumps(json.loads(str(table).replace("'", '"')), indent=2))

@@ -16,7 +16,7 @@ class Cisco:
 
             match_route = re.search(re_route, route, flags=re.M)
 
-            track = re.search(r'track\s+(\d+)', route).group(1) if re.search(r'track\s+(\d+)', route) else ""
+            track = int(re.search(r'track\s+(\d+)', route).group(1)) if re.search(r'track\s+(\d+)', route) else ""
             route_without_track = re.sub(r'track\s+\d+', '', match_route.group('name').replace('"', '').replace('\n', '')) if match_route.group('name') else ""
 
             v4_routes.append({
@@ -27,8 +27,8 @@ class Cisco:
                 },
                 "vrf": match_route.group('vrf') if match_route.group('vrf') else "",
                 "gateway": match_route.group('gateway'),
-                "metric": match_route.group('metric') if match_route.group('metric') else "",
-                "tag": match_route.group('tag') if match_route.group('tag') else "",
+                "metric": int(match_route.group('metric')) if match_route.group('metric') else "",
+                "tag": int(match_route.group('tag')) if match_route.group('tag') else "",
                 "permanent": "true" if re.search(r'\bpermanent\b', route) else "false",
                 "name": route_without_track.strip(),
                 "track": track
@@ -51,21 +51,21 @@ class Cisco:
         match_serial_number = re.search(re_serial_number, output, flags=re.M)
         match_config_register = re.search(re_config_register, output, flags=re.M)
 
-        return [{
+        return {
             "serie": match_serie_version.group('serie'),
             "version": match_serie_version.group('version'),
             "hostname": match_hostname_uptime.group('hostname'),
             "uptime": {
-                "years": match_hostname_uptime.group('years') if match_hostname_uptime.group('years') else "",
-                "weeks": match_hostname_uptime.group('weeks') if match_hostname_uptime.group('weeks') else "",
-                "days": match_hostname_uptime.group('days') if match_hostname_uptime.group('days') else "",
-                "hours": match_hostname_uptime.group('hours') if match_hostname_uptime.group('hours') else "",
-                "minutes": match_hostname_uptime.group('minutes'),
+                "years": int(match_hostname_uptime.group('years')) if match_hostname_uptime.group('years') else 0,
+                "weeks": int(match_hostname_uptime.group('weeks')) if match_hostname_uptime.group('weeks') else 0,
+                "days": int(match_hostname_uptime.group('days')) if match_hostname_uptime.group('days') else 0,
+                "hours": int(match_hostname_uptime.group('hours')) if match_hostname_uptime.group('hours') else 0,
+                "minutes": int(match_hostname_uptime.group('minutes')),
             },
             "system_image": match_system_image.group('system_image'),
             "serial_number": match_serial_number.group('serial_number'),
             "config_register": match_config_register.group('config_register'),
-        }]
+        }
 
     def separate_section(self, separator, content):
         if content == "":
@@ -146,7 +146,7 @@ class Cisco:
                     "ip": ip_info[0],
                     "mask": {
                         "octets": str(IPv4Network((0, ip_info[1])).netmask),
-                        "cidr": ip_info[1]
+                        "cidr": int(ip_info[1])
                     },
                     "vrf": vrf
                 })
@@ -176,16 +176,10 @@ class Cisco:
             if match_options:
                 for option in match_options:
                     options.append({
-                        "code": option[0],
+                        "code": int(option[0]),
                         "string_type": option[1],
                         "string": str(option[2]).replace('"', '')
                     })
-
-            # print(match_dhcp_pool_name)
-            # print(match_network)
-            # print(match_default_router)
-            # print(match_dns_server)
-            # print(match_options)
 
             res_dhcp.append({
                 "name": match_dhcp_pool_name.group('dhcp_pool_name'),
