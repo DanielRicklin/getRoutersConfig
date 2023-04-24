@@ -97,8 +97,7 @@ class Cisco:
             "switched": [],
             "routed": []
         }]
-        new_v4_interfaces = self.separate_section(
-            r"(^.*line protocol is.*$)", output_v4)
+        new_v4_interfaces = self.separate_section(r"(^.*line protocol is.*$)", output_v4)
 
         for interface in new_v4_interfaces:
             re_intf_name_state = r"^(?P<intf_name>\S+).+is.(?P<intf_state>.+)., line protocol is .(?P<intf_protocol_state>.+)$"
@@ -133,11 +132,17 @@ class Cisco:
             for ip_info in match_ip:
                 # if ip_info:
                 re_vrf = r"ip vrf forwarding (?P<vrf>\S+)"
+                re_description = r"description (?P<description>.+)"
+
                 match_vrf = re.search(re_vrf, output_run, flags=re.M)
+                match_description = re.search(re_description, output_run, flags=re.M)
+
                 vrf = match_vrf.group('vrf') if match_vrf else ""
+                description = match_description.group('description') if match_description else ""
 
                 v4_interfaces[0]["routed"].append({
                     "name": intf_name,
+                    "description": description,
                     "ip": ip_info[0],
                     "mask": {
                         "octets": str(IPv4Network((0, ip_info[1])).netmask),
@@ -147,3 +152,53 @@ class Cisco:
                 })
 
         return v4_interfaces
+    
+    def getDhcp(self):
+        output_v4 = self.net_connect.send_command('show run | s ip dhcp pool')
+        res_dhcp = []
+        options = []
+
+        new_dhcp = self.separate_section(r"(^ip dhcp pool.*$)", output_v4)
+
+        for dhcp in new_dhcp:
+            re_dhcp_pool_name = r"^ip dhcp pool (?P<dhcp_pool_name>.+)$"
+            re_network = r"network (?P<network_address>\d+.\d+.\d+.\d+) (?P<network_mask>\d+.\d+.\d+.\d+)"
+            re_default_router = r"default-router (?P<default_router>\d+.\d+.\d+.\d+)"
+            re_dns_server = r"dns-server (?P<dns_server>.+)"
+            re_options = r"option (?P<code>\d+) (?P<string_type>\S+) (?P<string>\S+)"
+
+            match_dhcp_pool_name = re.search(re_dhcp_pool_name, dhcp, flags=re.M)
+            match_network = re.search(re_network, dhcp, flags=re.M)
+            match_default_router = re.search(re_default_router, dhcp, flags=re.M)
+            match_dns_server = re.search(re_dns_server, dhcp, flags=re.M)
+            match_options = re.findall(re_options, dhcp, flags=re.M)
+
+            if match_options:
+                for option in match_options:
+                    options.append({
+                        "code": option[0],
+                        "string_type": option[1],
+                        "string": str(option[2]).replace('"', '')
+                    })
+
+            # print(match_dhcp_pool_name)
+            # print(match_network)
+            # print(match_default_router)
+            # print(match_dns_server)
+            # print(match_options)
+
+            res_dhcp.append({
+                "name": match_dhcp_pool_name.group('dhcp_pool_name'),
+                "network": {
+                    "subnet_address": match_network.group('network_address'),
+                    "mask": {
+                        "octets": match_network.group('network_address'),
+                        "cidr": IPv4Network((0, match_network.group('network_mask'))).prefixlen,
+                    }
+                },
+                "default_router": match_default_router.group('default_router'),
+                "dns_server": [i for i in match_dns_server.group('dns_server').strip().split(' ')],
+                "option": options
+            })
+
+        return res_dhcp

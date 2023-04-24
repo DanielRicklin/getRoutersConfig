@@ -15,7 +15,8 @@ class Router:
         return {
             "system": self.router.getSystemInformation(),
             "ipv4StaticRoutes": self.router.getipv4StaticRoutes(),
-            "interfaces": self.router.getInterfaces()
+            "interfaces": self.router.getInterfaces(),
+            "dhcp": self.router.getDhcp()
         }
 
     def getipv4StaticRoutes(self):
@@ -26,3 +27,6 @@ class Router:
     
     def getInterfaces(self):
         return self.router.getInterfaces()
+    
+    def getDhcp(self):
+        return self.router.getDhcp()
