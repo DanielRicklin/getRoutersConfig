@@ -13,7 +13,6 @@ bastion_ip and bastion_port are optional
 # Get system informations
 ```python
 from getRoutersConfig import setInformations
-import json
 
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
@@ -38,7 +37,6 @@ The Schema is :
 # Get static routes
 ```python
 from getRoutersConfig import setInformations
-import json
 
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
@@ -69,7 +67,6 @@ The Schema is :
 # Get interfaces
 ```python
 from getRoutersConfig import setInformations
-import json
 
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
@@ -107,7 +104,6 @@ The Schema is :
 # Get DHCP
 ```python
 from getRoutersConfig import setInformations
-import json
 
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
@@ -148,7 +144,6 @@ The Schema is :
 # Get full configuration
 ```python
 from getRoutersConfig import setInformations
-import json
 
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
