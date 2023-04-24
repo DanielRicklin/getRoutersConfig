@@ -12,7 +12,7 @@ This return Cisco configuration and information like :
 from getRoutersConfig import setInformations
 import json
 
-router = setInformations(host_ip=IP, user=USER, password=PASSWORD)
+router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 system_information = router.getSystemInformation()
 ```
@@ -37,7 +37,7 @@ The Schema is :
 from getRoutersConfig import setInformations
 import json
 
-router = setInformations(host_ip=IP, user=USER, password=PASSWORD)
+router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 static_routes = router.getStaticRoutes()
 ```
@@ -68,7 +68,7 @@ The Schema is :
 from getRoutersConfig import setInformations
 import json
 
-router = setInformations(host_ip=IP, user=USER, password=PASSWORD)
+router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 interfaces = router.getInterfaces()
 ```
@@ -106,7 +106,7 @@ The Schema is :
 from getRoutersConfig import setInformations
 import json
 
-router = setInformations(host_ip=IP, user=USER, password=PASSWORD)
+router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 dhcp = router.getDhcp()
 ```
@@ -147,7 +147,7 @@ The Schema is :
 from getRoutersConfig import setInformations
 import json
 
-router = setInformations(host_ip=IP, user=USER, password=PASSWORD)
+router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 config = router.getFullConfiguration()
 ```
