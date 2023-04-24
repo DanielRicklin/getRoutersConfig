@@ -1,3 +1,1 @@
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/netmiko.svg)](https://img.shields.io/pypi/pyversions/netmiko)
-
-# getRoutersConfig
+# Check https://pypi.org/project/getRoutersConfig/
