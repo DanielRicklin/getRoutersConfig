@@ -3,7 +3,7 @@ import time
 from .RouterClass import Router
 from pysnmp.hlapi import *
 
-def setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='') -> Router:
+def setInformations(host_ip: str='', host_port: int=22, host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: int=22) -> Router:
     if not bastion_ip:
         device_type: str = getDeviceType(host_ip, host_snmp_community)
 
