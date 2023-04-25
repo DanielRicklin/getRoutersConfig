@@ -20,7 +20,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Operating System :: OS Independent",
     ],
-    install_requires=["netmiko >= 4.1.2"],
+    install_requires=["netmiko >= 4.1.2","pysnmp>=4.4.12"],
     extras_require={
         "dev": ["twine >= 4.0.2"],
     },
