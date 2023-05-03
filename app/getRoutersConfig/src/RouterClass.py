@@ -11,16 +11,19 @@ class Router:
         elif self.router_type == "cisco_ios":
             self.router = Cisco(self.net_connect)
 
+    def disconnect(self):
+        self.net_connect.disconnect()
+
     def getFullConfiguration(self):
         return {
             "system": self.router.getSystemInformation(),
-            "ipv4StaticRoutes": self.router.getipv4StaticRoutes(),
+            "ipv4StaticRoutes": self.router.getIpv4StaticRoutes(),
             "interfaces": self.router.getInterfaces(),
             "dhcp": self.router.getDhcp()
         }
 
-    def getipv4StaticRoutes(self):
-        return self.router.getipv4StaticRoutes()
+    def getIpv4StaticRoutes(self):
+        return self.router.getIpv4StaticRoutes()
     
     def getSystemInformation(self):
         return self.router.getSystemInformation()

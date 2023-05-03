@@ -5,7 +5,7 @@ class Cisco:
     def __init__(self, net_connect):
         self.net_connect = net_connect
 
-    def getipv4StaticRoutes(self) -> list:
+    def getIpv4StaticRoutes(self) -> list:
         output = self.net_connect.send_command(f"show running-config | i ip route")
 
         v4_routes = []
@@ -162,9 +162,9 @@ class Cisco:
 
         for dhcp in new_dhcp:
             re_dhcp_pool_name = r"^ip dhcp pool (?P<dhcp_pool_name>.+)$"
-            re_network = r"network (?P<network_address>\d+.\d+.\d+.\d+) (?P<network_mask>\d+.\d+.\d+.\d+)"
-            re_default_router = r"default-router (?P<default_router>\d+.\d+.\d+.\d+)"
-            re_dns_server = r"dns-server (?P<dns_server>.+)"
+            re_network = r"(network (?P<network_address>\d+.\d+.\d+.\d+) (?P<network_mask>\d+.\d+.\d+.\d+))?"
+            re_default_router = r"(default-router (?P<default_router>\d+.\d+.\d+.\d+))?"
+            re_dns_server = r"(dns-server (?P<dns_server>.+))?"
             re_options = r"option (?P<code>\d+) (?P<string_type>\S+) (?P<string>\S+)"
 
             match_dhcp_pool_name = re.search(re_dhcp_pool_name, dhcp, flags=re.M)
@@ -184,14 +184,14 @@ class Cisco:
             res_dhcp.append({
                 "name": match_dhcp_pool_name.group('dhcp_pool_name'),
                 "network": {
-                    "subnet_address": match_network.group('network_address'),
+                    "subnet_address": match_network.group('network_address') if match_network.group('network_address') else "",
                     "mask": {
-                        "octets": match_network.group('network_address'),
-                        "cidr": IPv4Network((0, match_network.group('network_mask'))).prefixlen,
+                        "octets": match_network.group('network_address') if match_network.group('network_address') else "",
+                        "cidr": IPv4Network((0, match_network.group('network_mask'))).prefixlen if match_network.group('network_address') else "",
                     }
                 },
-                "default_router": match_default_router.group('default_router'),
-                "dns_server": [i for i in match_dns_server.group('dns_server').strip().split(' ')],
+                "default_router": match_default_router.group('default_router') if match_default_router.group('default_router') else "",
+                "dns_server": [i for i in match_dns_server.group('dns_server').strip().split(' ')] if match_dns_server.group('dns_server') else "",
                 "option": options
             })
 

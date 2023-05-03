@@ -34,6 +34,15 @@ The Schema is :
 }
 ```
 
+# Disconnect from router
+```python
+from getRoutersConfig import setInformations
+
+router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
+
+system_information = router.disconnect()
+```
+
 # Get static routes
 ```python
 from getRoutersConfig import setInformations

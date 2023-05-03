@@ -5,7 +5,7 @@ with open("app/README.md", "r") as f:
 
 setup(
     name="getRoutersConfig",
-    version="0.0.3",
+    version="0.0.5",
     description="get Cisco routers configuration as Json",
     package_dir={"": "app"},
     packages=find_packages(where="app"),
@@ -24,7 +24,7 @@ setup(
     extras_require={
         "dev": ["twine >= 4.0.2"],
     },
-    python_requires=">=3.10",
+    python_requires=">=3.7",
 )
 
 #python setup.py bdist_wheel sdist

@@ -13,23 +13,27 @@ def setInformations(host_ip: str='', host_port: int=22, host_snmp_community: str
         'username': user,
         'password': password,
         'port': host_port if not bastion_ip else bastion_port,
+        # 'session_log': 'output.log'
     }
 
     net_connect = ConnectHandler(**host)
 
-    if bastion_ip:
-        output = net_connect.write_channel(f"snmpwalk -v2c -c covareck {host_ip} SNMPv2-MIB::sysDescr\n")
+    time.sleep(3)
 
+    if bastion_ip:
+
+        net_connect.write_channel(f"snmpwalk -v2c -c covareck {host_ip} SNMPv2-MIB::sysDescr\n")
+        net_connect.write_channel(f"ssh {host_ip}\r\n")
+
+        # time.sleep(2)
+        output = net_connect.read_channel()
+        # print(output)
         if "huawei" in output.lower():
             device_type: str = "huawei"
         elif "cisco" in output.lower():
             device_type: str = "cisco_ios"
 
-        net_connect.write_channel(f"ssh {host_ip}\r\n")
-
         time.sleep(2)
-
-        output = net_connect.read_channel()
 
         if 'password' in output.lower():
             net_connect.write_channel(password)
@@ -42,7 +46,7 @@ def getDeviceType(ip, snmp_community):
     iterator = getCmd(
         SnmpEngine(),
         CommunityData(snmp_community, mpModel=0),
-        UdpTransportTarget((ip, 161)),
+        UdpTransportTarget((ip, 161), timeout=5, retries=10),
         ContextData(),
         ObjectType(ObjectIdentity('SNMPv2-MIB', 'sysDescr', 0))
     )
@@ -61,6 +65,6 @@ def getDeviceType(ip, snmp_community):
                 return "huawei"
             elif "cisco" in output.lower():
                 return "cisco_ios"
-            raise ValueError("The router needs to be a Cisco_ios or Huawei")
+            raise ValueError("The router needs to be Cisco_ios or Huawei")
 
 # net_connect.disconnect()
