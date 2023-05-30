@@ -133,12 +133,18 @@ class Cisco:
                 # if ip_info:
                 re_vrf = r"ip vrf forwarding (?P<vrf>\S+)"
                 re_description = r"description (?P<description>.+)"
+                re_acl_in = r"ip access-group (?P<acl_in>.+) in"
+                re_acl_out = r"ip access-group (?P<acl_out>.+) out"
 
                 match_vrf = re.search(re_vrf, output_run, flags=re.M)
                 match_description = re.search(re_description, output_run, flags=re.M)
+                match_acl_in = re.search(re_acl_in, output_run, flags=re.M)
+                match_acl_out = re.search(re_acl_out, output_run, flags=re.M)
 
                 vrf = match_vrf.group('vrf') if match_vrf else ""
                 description = match_description.group('description') if match_description else ""
+                acl_in = match_acl_in.group('acl_in') if match_acl_in else ""
+                acl_out = match_acl_out.group('acl_out') if match_acl_out else ""
 
                 v4_interfaces[0]["routed"].append({
                     "name": intf_name,
@@ -148,7 +154,9 @@ class Cisco:
                         "octets": str(IPv4Network((0, ip_info[1])).netmask),
                         "cidr": int(ip_info[1])
                     },
-                    "vrf": vrf
+                    "vrf": vrf,
+                    "acl_in": acl_in,
+                    "acl_out": acl_out
                 })
 
         return v4_interfaces
@@ -196,3 +204,11 @@ class Cisco:
             })
 
         return res_dhcp
+    
+    def getAcl(self):
+        output_v4 = self.net_connect.send_command('show ip access-lists')
+
+        new_acl = self.separate_section(r"(^.*IP access list.*$)", output_v4)
+
+        print(new_acl)
+

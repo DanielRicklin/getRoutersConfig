@@ -33,3 +33,6 @@ class Router:
     
     def getDhcp(self):
         return self.router.getDhcp()
+    
+    def getAcl(self):
+        return self.router.getAcl()

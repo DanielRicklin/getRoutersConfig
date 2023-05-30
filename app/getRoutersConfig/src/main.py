@@ -4,8 +4,10 @@ from .RouterClass import Router
 from pysnmp.hlapi import *
 
 def setInformations(host_ip: str='', host_port: int=22, host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: int=22) -> Router:
+    device_type: str = ""
+    
     if not bastion_ip:
-        device_type: str = getDeviceType(host_ip, host_snmp_community)
+        device_type = getDeviceType(host_ip, host_snmp_community)
 
     host = {
         'device_type': device_type if not bastion_ip else "terminal_server",
@@ -25,14 +27,14 @@ def setInformations(host_ip: str='', host_port: int=22, host_snmp_community: str
         net_connect.write_channel(f"snmpwalk -v2c -c covareck {host_ip} SNMPv2-MIB::sysDescr\n")
         net_connect.write_channel(f"ssh {host_ip}\r\n")
 
-        # time.sleep(2)
+        time.sleep(2)
         output = net_connect.read_channel()
-        # print(output)
         if "huawei" in output.lower():
-            device_type: str = "huawei"
+            device_type = "huawei"
         elif "cisco" in output.lower():
-            device_type: str = "cisco_ios"
+            device_type = "cisco_ios"
 
+        # print(output.lower())
         time.sleep(2)
 
         if 'password' in output.lower():
