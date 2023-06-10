@@ -171,43 +171,14 @@ The Schema is :
             {
                 "sequence_number": 10,
                 "pass": "permit",
-                "protocol": "ip",
+                "protocol": "udp",
                 "source": "any",
                 "source_port": "all",
                 "destination": "host 192.168.10.3",
-                "destination_port": "all",
-                "macthes": 0
-            },
-            {
-                "sequence_number": 20,
-                "pass": "permit",
-                "protocol": "ip",
-                "source": "any",
-                "source_port": "all",
-                "destination": "host 10.25.59.200",
-                "destination_port": "all",
-                "macthes": 330
-            },
-            {
-                "sequence_number": 30,
-                "pass": "permit",
-                "protocol": "ip",
-                "source": "any",
-                "source_port": "all",
-                "destination": "host 10.24.2.166",
-                "destination_port": "all",
+                "destination_port": "snmp",
                 "macthes": 2417837
             },
-            {
-                "sequence_number": 40,
-                "pass": "permit",
-                "protocol": "ip",
-                "source": "any",
-                "source_port": "all",
-                "destination": "host 10.52.59.200",
-                "destination_port": "all",
-                "macthes": 0
-            }
+            ...
         ]
     },
     ...
