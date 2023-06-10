@@ -13,7 +13,7 @@ router = setInformations(host_ip=IP, user=USER, password=PASSWORD, bastion_ip=BA
 # table = router.getIpv4StaticRoutes()
 # table = router.getInterfaces()
 # table = router.getDhcp()
-table = router.getAcl()
+table = router.getIpv4Acl()
 
 # table = router.getFullConfiguration()
 router.disconnect()

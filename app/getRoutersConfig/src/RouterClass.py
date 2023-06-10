@@ -34,5 +34,5 @@ class Router:
     def getDhcp(self):
         return self.router.getDhcp()
     
-    def getAcl(self):
-        return self.router.getAcl()
+    def getIpv4Acl(self):
+        return self.router.getIpv4Acl()

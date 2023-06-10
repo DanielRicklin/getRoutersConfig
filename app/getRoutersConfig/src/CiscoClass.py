@@ -205,10 +205,40 @@ class Cisco:
 
         return res_dhcp
     
-    def getAcl(self):
+    def getIpv4Acl(self):
         output_v4 = self.net_connect.send_command('show ip access-lists')
+        res_ipv4_acl = []
 
         new_acl = self.separate_section(r"(^.*IP access list.*$)", output_v4)
 
-        print(new_acl)
+        for acl in new_acl:
+            acl_rule = []
+            re_acl_type_name = r"^(?P<acl_type>\S+) IP access list (?P<acl_name>.+)"
+            re_acl_rule = r"(?P<sequence_number>\d+) (?P<pass>\S+) (?P<protocol>\S+) (any|host \d+.\d+.\d+.\d+|\d+.\d+.\d+.\d+ \d+.\d+.\d+.\d+)( eq (\S+|\d+))? (any|host \d+.\d+.\d+.\d+|\d+.\d+.\d+.\d+ \d+.\d+.\d+.\d+)( eq (\S+|\d+))?( \((\d+) matches\))?"
 
+            match_acl_type_name = re.search(re_acl_type_name, acl, flags=re.M)
+            match_acl_rule = re.findall(re_acl_rule, acl, flags=re.M)
+
+            if match_acl_rule:
+                for acl in match_acl_rule:
+                    print(acl)
+                    acl_rule.append({
+                        "sequence_number": int(acl[0]),
+                        "pass": acl[1],
+                        "protocol": acl[2],
+                        "source": acl[3],
+                        "source_port": acl[5] if acl[4] else "all",
+                        "destination": acl[6],
+                        "destination_port": acl[8] if acl[8] else "all",
+                        "macthes": int(acl[10]) if acl[10] else 0,
+                        # "option": acl[5] if acl[5] else ""
+                    })
+
+            if match_acl_type_name.group('acl_name') not in ["97", "98", "99", "ACL-IP-MANAGEMENT", "ACL-ControlPlane"]:
+                res_ipv4_acl.append({
+                    "type": match_acl_type_name.group('acl_type'),
+                    "name": match_acl_type_name.group('acl_name'),
+                    "rule": acl_rule
+                })
+
+        return res_ipv4_acl
