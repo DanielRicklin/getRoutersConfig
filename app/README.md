@@ -18,6 +18,7 @@ from getRoutersConfig import setInformations
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 system_information = router.getSystemInformation()
+router.disconnect()
 ```
 
 The Schema is :
@@ -40,15 +41,6 @@ The Schema is :
 }
 ```
 
-# Disconnect from router
-```python
-from getRoutersConfig import setInformations
-
-router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
-
-system_information = router.disconnect()
-```
-
 # Get static routes
 ```python
 from getRoutersConfig import setInformations
@@ -56,6 +48,7 @@ from getRoutersConfig import setInformations
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 static_routes = router.getStaticRoutes()
+router.disconnect()
 ```
 
 The Schema is :
@@ -86,6 +79,7 @@ from getRoutersConfig import setInformations
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 interfaces = router.getInterfaces()
+router.disconnect()
 ```
 
 The Schema is :
@@ -123,6 +117,7 @@ from getRoutersConfig import setInformations
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 dhcp = router.getDhcp()
+router.disconnect()
 ```
 
 The Schema is :
@@ -163,6 +158,7 @@ from getRoutersConfig import setInformations
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 dhcp = router.getIpv4Acl()
+router.disconnect()
 ```
 
 The Schema is :
@@ -197,6 +193,7 @@ from getRoutersConfig import setInformations
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
 config = router.getFullConfiguration()
+router.disconnect()
 ```
 
 The Schema is :
