@@ -42,17 +42,20 @@ class Cisco:
         re_serie_version = r'Cisco IOS Software, (?P<serie>\S+) Software (\S+), Version (?P<version>\S+), RELEASE SOFTWARE \S+'
         re_hostname_uptime = r'(?P<hostname>\S+) uptime is( (?P<years>\d+) year(s)?,)?( (?P<weeks>\d+) week(s)?,)?( (?P<days>\d+) day(s)?,)?( (?P<hours>\d+) hour(s)?,)?( (?P<minutes>\d+) minute(s)?)?'
         re_system_image = r'System image file is "flash:(?P<system_image>\S+)"'
+        re_model = r'Cisco (?P<model>\S+) \(revision \S+\) with \S+ bytes of memory.'
         re_serial_number = r'Processor board ID (?P<serial_number>\S+)'
         re_config_register = r'Configuration register is (?P<config_register>\S+)'
 
         match_serie_version = re.search(re_serie_version, output, flags=re.M)
         match_hostname_uptime = re.search(re_hostname_uptime, output, flags=re.M)
         match_system_image = re.search(re_system_image, output, flags=re.M)
+        match_model = re.search(re_model, output, flags=re.M)
         match_serial_number = re.search(re_serial_number, output, flags=re.M)
         match_config_register = re.search(re_config_register, output, flags=re.M)
 
         return {
             "serie": match_serie_version.group('serie'),
+            "model": match_model.group('model'),
             "version": match_serie_version.group('version'),
             "hostname": match_hostname_uptime.group('hostname'),
             "uptime": {

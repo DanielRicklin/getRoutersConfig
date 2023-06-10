@@ -23,15 +23,20 @@ system_information = router.getSystemInformation()
 The Schema is :
 ```json
 {
-    "serie": "C870",
-    "version": "12.4(24)T4",
-    "hostname": "HomeC871",
+    "serie": "C800",
+    "model": "C891F-K9",
+    "version": "15.4(3)M6",
+    "hostname": "THE_ROUTER",
     "uptime": {
         "years": 0,
-        "weeks": 0,
-        "days": 2,
-        "hours": 2,
-        "minutes": 44
+        "weeks": 1,
+        "days": 1,
+        "hours": 11,
+        "minutes": 25
+    },
+    "system_image": "c800-universalk9-mz.SPA.154-3.M6.bin",
+    "serial_number": "FCZ1234A5BC",
+    "config_register": "0x2102"
 }
 ```
 
@@ -201,6 +206,7 @@ The Schema is :
     "system": {},
     "ipv4StaticRoutes": [],
     "interfaces": [],
-    "dhcp": []
+    "dhcp": [],
+    "acl": []
 }
 ```

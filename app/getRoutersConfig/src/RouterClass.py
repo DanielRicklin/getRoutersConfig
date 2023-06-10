@@ -19,7 +19,8 @@ class Router:
             "system": self.router.getSystemInformation(),
             "ipv4StaticRoutes": self.router.getIpv4StaticRoutes(),
             "interfaces": self.router.getInterfaces(),
-            "dhcp": self.router.getDhcp()
+            "dhcp": self.router.getDhcp(),
+            "acl": self.router.getIpv4Acl()
         }
 
     def getIpv4StaticRoutes(self):
