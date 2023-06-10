@@ -221,7 +221,6 @@ class Cisco:
 
             if match_acl_rule:
                 for acl in match_acl_rule:
-                    print(acl)
                     acl_rule.append({
                         "sequence_number": int(acl[0]),
                         "pass": acl[1],
