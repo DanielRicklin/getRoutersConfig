@@ -1,4 +1,5 @@
 from ipaddress import IPv4Network
+from .tools import separate_section
 import re
 
 class Cisco:
@@ -9,7 +10,7 @@ class Cisco:
         output = self.net_connect.send_command(f"show running-config | i ip route")
 
         v4_routes = []
-        new_v4_routes = self.separate_section(r"(^.*ip route.*$)", output)
+        new_v4_routes = separate_section(r"(^.*ip route.*$)", output)
 
         for route in new_v4_routes:
             re_route = r'ip route( vrf (?P<vrf>\S+))? (?P<subnet_address>\d+.\d+.\d+.\d+) (?P<subnet_mask>\d+.\d+.\d+.\d+) (?P<gateway>\d+.\d+.\d+.\d+)( (?P<metric>\d+))?( tag (?P<tag>\d+))?( name (?P<name>(\S|\s)+))?' #(?!.*\btrack\b)
@@ -70,37 +71,15 @@ class Cisco:
             "config_register": match_config_register.group('config_register'),
         }
 
-    def separate_section(self, separator, content):
-        if content == "":
-            return []
+    
 
-        lines = re.split(separator, content, flags=re.M)
-
-        if len(lines) == 1:
-            msg = "Unexpected output data:\n{}".format(lines)
-            raise ValueError(msg)
-
-        lines.pop(0)
-
-        if len(lines) % 2 != 0:
-            msg = "Unexpected output data:\n{}".format(lines)
-            raise ValueError(msg)
-
-        lines_iter = iter(lines)
-
-        try:
-            new_lines = [line + next(lines_iter, '') for line in lines_iter]
-        except TypeError:
-            raise ValueError()
-        return new_lines
-
-    def getInterfaces(self):
+    def getInterfaces(self) -> list:
         output_v4 = self.net_connect.send_command('show ip interface')
         v4_interfaces = [{
             "switched": [],
             "routed": []
         }]
-        new_v4_interfaces = self.separate_section(r"(^.*line protocol is.*$)", output_v4)
+        new_v4_interfaces = separate_section(r"(^.*line protocol is.*$)", output_v4)
 
         for interface in new_v4_interfaces:
             re_intf_name_state = r"^(?P<intf_name>\S+).+is.(?P<intf_state>.+)., line protocol is .(?P<intf_protocol_state>.+)$"
@@ -164,12 +143,12 @@ class Cisco:
 
         return v4_interfaces
     
-    def getDhcp(self):
+    def getDhcp(self) -> list:
         output_v4 = self.net_connect.send_command('show run | s ip dhcp pool')
         res_dhcp = []
         options = []
 
-        new_dhcp = self.separate_section(r"(^ip dhcp pool.*$)", output_v4)
+        new_dhcp = separate_section(r"(^ip dhcp pool.*$)", output_v4)
 
         for dhcp in new_dhcp:
             re_dhcp_pool_name = r"^ip dhcp pool (?P<dhcp_pool_name>.+)$"
@@ -208,11 +187,11 @@ class Cisco:
 
         return res_dhcp
     
-    def getIpv4Acl(self):
+    def getIpv4Acl(self) -> list:
         output_v4 = self.net_connect.send_command('show ip access-lists')
         res_ipv4_acl = []
 
-        new_acl = self.separate_section(r"(^.*IP access list.*$)", output_v4)
+        new_acl = separate_section(r"(^.*IP access list.*$)", output_v4)
 
         for acl in new_acl:
             acl_rule = []
