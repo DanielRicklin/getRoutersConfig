@@ -161,7 +161,7 @@ from getRoutersConfig import setInformations
 
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
-dhcp = router.getIpv4Acl()
+acl = router.getIpv4Acl()
 
 router.disconnect()
 ```
