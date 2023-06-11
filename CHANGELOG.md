@@ -2,12 +2,12 @@
 All notable changes of this project will be documented in this file.
 
 ## [0.0.5] - 2023-11-06
-### Added
+### New
 
-- add __*getIpv4Acl*__ function to return IPv4 ACL for Cisco routeurs
+- added __*getIpv4Acl*__ function to return IPv4 ACL of Cisco routers
  
-### Changed
+### Changes
 
-- adding model for __*getSystemInformation*__ function
+- added router model in __*getSystemInformation*__ function
  
-### Fixed
+### Fixes
