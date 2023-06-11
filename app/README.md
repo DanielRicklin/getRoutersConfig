@@ -42,13 +42,13 @@ The Schema is :
 }
 ```
 
-# Get static routes
+# Get Ipv4 static routes
 ```python
 from getRoutersConfig import setInformations
 
 router = setInformations(host_ip: str='', host_port: str='22', host_snmp_community: str='public', user: str='', password: str='', bastion_ip: str='', bastion_port: str='')
 
-static_routes = router.getStaticRoutes()
+static_routes = router.getIpv4StaticRoutes()
 
 router.disconnect()
 ```
