@@ -37,8 +37,7 @@ The Schema is :
         "minutes": 25
     },
     "system_image": "c800-universalk9-mz.SPA.154-3.M6.bin",
-    "serial_number": "FCZ1234A5BC",
-    "config_register": "0x2102"
+    "serial_number": "FCZ1234A5BC"
 }
 ```
 
