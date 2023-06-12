@@ -97,3 +97,79 @@ class Huawei:
             })
 
         return v4_routes
+    
+    def getInterfaces(self) -> list:
+        output_v4 = self.net_connect.send_command('display interface')
+        v4_interfaces = [{
+            "switched": [],
+            "routed": []
+        }]
+
+        new_v4_interfaces = separate_section(r"^(Cellular\S+|Ethernet\S+|GigabitEthernet\S+|NULL0|Virtual-Template\d+|Vlanif\d+|Wlan-Radio\S+) current state :.*$", output_v4)
+
+        for interface in new_v4_interfaces:
+            re_intf_name_state = r"^(Cellular\S+|Ethernet\S+|GigabitEthernet\S+|NULL0|Virtual-Template\d+|Vlanif\d+|Wlan-Radio\S+).*$"
+            # re_intf_protocol_state = r"line protocol current state : (?P<intf_protocol_state>.+)$"
+            re_intf_ip = r"Internet Address is (?P<ip_address>\d+.\d+.\d+.\d+)\/(?P<prefix_length>\d+)"
+
+            match_intf = re.search(re_intf_name_state, interface, flags=re.M)
+
+        #     intf_name = match_intf.group('intf_name')
+
+            match_ip = re.findall(re_intf_ip, interface, flags=re.M)
+
+            output_run = self.net_connect.send_command(f'display current-configuration interface {match_intf[0]}')
+
+            if not match_ip and re.search('FastEthernet|GigabitEthernet', match_intf[0]):
+                # print(output_run)
+                # re_switchport = r"port link-type (?P<switchport_mode>\S+)"
+                re_vlan = r"port( link-type (?P<switchport_mode>\S+)$)?( trunk allow-pass vlan (?P<vlan_trunk>.*+)$)?( default vlan (?P<vlan>\S+))?"
+
+                # match_switchport = re.search(re_switchport, output_run, flags=re.M)
+                match_switchport = re.findall(re_vlan, output_run, flags=re.M)
+
+                print(match_switchport)
+
+                if match_switchport:
+                    v4_interfaces[0]["switched"].append({
+                        "name": match_intf[0],
+                        "switchport_mode": match_switchport[0][1],
+                        "vlan": match_switchport[1][3] if match_switchport[1][3] else "1"
+                    })
+                else:
+                    v4_interfaces[0]["switched"].append({
+                        "name": match_intf[0],
+                        "switchport_mode": "access",
+                        "vlan": "1"
+                    })
+
+        #     for ip_info in match_ip:
+        #         re_vrf = r"ip vrf forwarding (?P<vrf>\S+)"
+        #         re_description = r"description (?P<description>.+)"
+        #         re_acl_in = r"ip access-group (?P<acl_in>.+) in"
+        #         re_acl_out = r"ip access-group (?P<acl_out>.+) out"
+
+        #         match_vrf = re.search(re_vrf, output_run, flags=re.M)
+        #         match_description = re.search(re_description, output_run, flags=re.M)
+        #         match_acl_in = re.search(re_acl_in, output_run, flags=re.M)
+        #         match_acl_out = re.search(re_acl_out, output_run, flags=re.M)
+
+        #         vrf = match_vrf.group('vrf') if match_vrf else ""
+        #         description = match_description.group('description') if match_description else ""
+        #         acl_in = match_acl_in.group('acl_in') if match_acl_in else ""
+        #         acl_out = match_acl_out.group('acl_out') if match_acl_out else ""
+
+        #         v4_interfaces[0]["routed"].append({
+        #             "name": intf_name,
+        #             "description": description,
+        #             "ip": ip_info[0],
+        #             "mask": {
+        #                 "octets": str(IPv4Network((0, ip_info[1])).netmask),
+        #                 "cidr": int(ip_info[1])
+        #             },
+        #             "vrf": vrf,
+        #             "acl_in": acl_in,
+        #             "acl_out": acl_out
+        #         })
+
+        return v4_interfaces
