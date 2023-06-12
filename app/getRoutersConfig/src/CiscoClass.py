@@ -45,14 +45,14 @@ class Cisco:
         re_system_image = r'System image file is "flash:(?P<system_image>\S+)"'
         re_model = r'Cisco (?P<model>\S+) \(revision \S+\) with \S+ bytes of memory.'
         re_serial_number = r'Processor board ID (?P<serial_number>\S+)'
-        re_config_register = r'Configuration register is (?P<config_register>\S+)'
+        # re_config_register = r'Configuration register is (?P<config_register>\S+)'
 
         match_serie_version = re.search(re_serie_version, output, flags=re.M)
         match_hostname_uptime = re.search(re_hostname_uptime, output, flags=re.M)
         match_system_image = re.search(re_system_image, output, flags=re.M)
         match_model = re.search(re_model, output, flags=re.M)
         match_serial_number = re.search(re_serial_number, output, flags=re.M)
-        match_config_register = re.search(re_config_register, output, flags=re.M)
+        # match_config_register = re.search(re_config_register, output, flags=re.M)
 
         return {
             "serie": match_serie_version.group('serie'),
@@ -68,7 +68,7 @@ class Cisco:
             },
             "system_image": match_system_image.group('system_image'),
             "serial_number": match_serial_number.group('serial_number'),
-            "config_register": match_config_register.group('config_register'),
+            # "config_register": match_config_register.group('config_register'),
         }
 
     
