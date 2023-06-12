@@ -30,4 +30,33 @@ class Huawei:
 
         return v4_interfaces
     
-    
+    def getIpv4StaticRoutes(self) -> list:
+        output = self.net_connect.send_command(f"display current-configuration | i ip route-static")
+
+        v4_routes = []
+        new_v4_routes = separate_section(r"(^.*ip route-static.*$)", output)
+
+        for route in new_v4_routes:
+            re_route = r'ip route-static( vpn-instance (?P<vrf>\S+))? (?P<subnet_address>\d+.\d+.\d+.\d+) (?P<subnet_mask>\d+.\d+.\d+.\d+) (?P<gateway>\d+.\d+.\d+.\d+|\S+)( (?P<metric>\d+))?( tag (?P<tag>\d+))?( description (?P<name>(\S|\s)+))?' #(?!.*\btrack\b)
+
+            match_route = re.search(re_route, route, flags=re.M)
+
+            track = int(re.search(r'track\s+(\d+)', route).group(1)) if re.search(r'track\s+(\d+)', route) else ""
+            route_without_track = re.sub(r'track\s+\d+', '', match_route.group('name').replace('"', '').replace('\n', '')) if match_route.group('name') else ""
+
+            v4_routes.append({
+                "subnet_address": match_route.group('subnet_address'),
+                "mask": {
+                    "octets": match_route.group('subnet_mask'),
+                    "cidr": IPv4Network((0, match_route.group('subnet_mask'))).prefixlen
+                },
+                "vrf": match_route.group('vrf') if match_route.group('vrf') else "",
+                "gateway": match_route.group('gateway'),
+                "metric": int(match_route.group('metric')) if match_route.group('metric') else "",
+                "tag": int(match_route.group('tag')) if match_route.group('tag') else "",
+                "permanent": "true" if re.search(r'\bpermanent\b', route) else "false",
+                "name": route_without_track.strip(),
+                "track": track
+            })
+
+        return v4_routes

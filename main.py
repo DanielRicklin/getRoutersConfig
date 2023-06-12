@@ -10,12 +10,12 @@ BASTION = os.environ.get("BASTION")
 
 router = setInformations(host_ip=IP, user=USER, password=PASSWORD, bastion_ip=BASTION)
 # table = router.getSystemInformation()
-# table = router.getIpv4StaticRoutes()
+table = router.getIpv4StaticRoutes()
 # table = router.getInterfaces()
 # table = router.getDhcp()
 # table = router.getIpv4Acl()
 
-table = router.getFullConfiguration()
+# table = router.getFullConfiguration()
 router.disconnect()
 
 print(json.dumps(json.loads(str(table).replace("'", '"')), indent=2))
