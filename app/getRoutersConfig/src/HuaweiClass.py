@@ -121,13 +121,20 @@ class Huawei:
                 re_vlan = r"port( link-type (?P<switchport_mode>\S+)$)?( trunk allow-pass vlan (?P<vlan_trunk>.*+)$)?( default vlan (?P<vlan>\S+))?"
 
                 match_switchport = re.findall(re_vlan, output_run, flags=re.M)
-
+                
                 if match_switchport:
-                    v4_interfaces[0]["switched"].append({
-                        "name": match_intf[0],
-                        "switchport_mode": match_switchport[0][1],
-                        "vlan": match_switchport[1][3] if match_switchport[1][3] else "1"
-                    })
+                    if match_switchport[0][1] == "trunk":
+                        v4_interfaces[0]["switched"].append({
+                            "name": match_intf[0],
+                            "switchport_mode": match_switchport[0][1],
+                            "vlan": match_switchport[1][3] if match_switchport[1][3] else "1"
+                        })
+                    elif match_switchport[0][1] == "access":
+                        v4_interfaces[0]["switched"].append({
+                            "name": match_intf[0],
+                            "switchport_mode": match_switchport[0][1],
+                            "vlan": match_switchport[1][5] if match_switchport[1][5] else "1"
+                        })
                 else:
                     v4_interfaces[0]["switched"].append({
                         "name": match_intf[0],
