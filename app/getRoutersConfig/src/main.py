@@ -24,7 +24,7 @@ def setInformations(host_ip: str='', host_port: int=22, host_snmp_community: str
 
     if bastion_ip:
 
-        net_connect.write_channel(f"snmpwalk -v2c -c covareck {host_ip} SNMPv2-MIB::sysDescr\n")
+        net_connect.write_channel(f"snmpwalk -v2c -c {host_snmp_community} {host_ip} SNMPv2-MIB::sysDescr\n")
         net_connect.write_channel(f"ssh {host_ip}\r\n")
 
         time.sleep(2)

@@ -23,11 +23,6 @@ class Huawei:
         match_model_uptime = re.search(re_model_uptime, output, flags=re.M)
         match_serial_number = re.search(re_serial_number, serial_number, flags=re.M)
 
-        print(match_serie_version_image)
-        print(match_hostname)
-        print(match_serial_number)
-
-
         return {
             "serie": match_serie_version_image.group('serie'),
             "model": match_model_uptime.group('model'),

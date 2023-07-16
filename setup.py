@@ -5,8 +5,8 @@ with open("app/README.md", "r") as f:
 
 setup(
     name="getRoutersConfig",
-    version="0.0.6",
-    description="get Cisco routers configuration as Json",
+    version="0.0.7",
+    description="get Cisco and Huawei routers configuration as Json",
     package_dir={"": "app"},
     packages=find_packages(where="app"),
     long_description=long_description,
