@@ -1,6 +1,14 @@
 # Change Log
 All notable changes of this project will be documented in this file.
 
+## [0.0.7] - 2023-16-07
+### New
+ 
+### Changes
+ 
+### Fixes
+ - snmp community is now fixed, you can choose your own one
+
 ## [0.0.6] - 2023-12-06
 ### New
 
